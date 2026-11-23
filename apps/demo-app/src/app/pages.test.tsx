@@ -44,7 +44,7 @@ describe('pages', () => {
   });
 
   it('lists products and marks sold-out ones', async () => {
-    const out = html(await HomePage());
+    const out = html(await HomePage(props({})));
     expect(out).toContain('href="/products/canvas-tote"');
     expect(out).toContain('$24.00');
     expect(out).toContain('Sold out');
