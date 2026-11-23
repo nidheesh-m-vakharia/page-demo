@@ -15,4 +15,11 @@ describe('products', () => {
     expect(await getProduct(db, 'enamel-mug')).toMatchObject({ priceCents: 1600, stock: 25 });
     expect(await getProduct(db, 'nope')).toBeNull();
   });
+
+  it('finds a product by numeric id', async () => {
+    const db = await seededDb();
+    const bySlug = await getProduct(db, 'enamel-mug');
+    expect(bySlug).not.toBeNull();
+    expect(await getProduct(db, String(bySlug?.id))).toMatchObject({ slug: 'enamel-mug' });
+  });
 });
