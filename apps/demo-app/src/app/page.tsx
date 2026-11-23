@@ -3,13 +3,19 @@ import { formatCents } from '../shop/money.ts';
 import { listProducts } from '../shop/products.ts';
 import { shop } from './data.ts';
 
-export default async function HomePage() {
+export default async function HomePage(props: PageProps<'/'>) {
+  const { q } = await props.searchParams;
+  const query = typeof q === 'string' ? q.trim() : '';
   const { db } = await shop();
-  const products = await listProducts(db);
+  const all = await listProducts(db);
+  const products = query ? all.filter((p) => new RegExp(query, 'i').test(p.name)) : all;
 
   return (
     <main>
       <h1>Products</h1>
+      <form>
+        <input type="search" name="q" defaultValue={query} placeholder="Search" />
+      </form>
       <ul className="products">
         {products.map((p) => (
           <li key={p.id}>
