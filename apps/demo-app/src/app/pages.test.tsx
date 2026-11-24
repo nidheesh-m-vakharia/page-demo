@@ -111,4 +111,13 @@ describe('pages', () => {
     expect(await navigation(OrderPage(props({ id: 'abc' })))).toBe('not-found');
     expect(await navigation(OrderPage(props({ id: '9999999999' })))).toBe('not-found');
   });
+
+  it('filters products by search query without crashing on regex special chars', async () => {
+    const out = html(await HomePage(props({}, { q: '(' })));
+    expect(out).toContain('type="search"');
+    expect(out).toContain('name="q"');
+    expect(out).toContain('value="("');
+    expect(out).not.toContain('Canvas Tote');
+    expect(out).not.toContain('Enamel Mug');
+  });
 });
