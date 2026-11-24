@@ -50,12 +50,6 @@ describe('pages', () => {
     expect(out).toContain('Sold out');
   });
 
-  it('filters products by search query without crashing on regex special chars', async () => {
-    const out = html(await HomePage(props({}, { q: '(' })));
-    expect(out).toContain('value="("');
-    expect(out).toContain('<ul class="products"></ul>');
-  });
-
   it('shows a product with an add-to-cart form', async () => {
     const out = html(await ProductPage(props({ slug: 'enamel-mug' })));
     expect(out).toContain('<h1>Enamel Mug</h1>');
@@ -116,5 +110,14 @@ describe('pages', () => {
     expect(await navigation(OrderPage(props({ id: '999' })))).toBe('not-found');
     expect(await navigation(OrderPage(props({ id: 'abc' })))).toBe('not-found');
     expect(await navigation(OrderPage(props({ id: '9999999999' })))).toBe('not-found');
+  });
+
+  it('filters products by search query without crashing on regex special chars', async () => {
+    const out = html(await HomePage(props({}, { q: '(' })));
+    expect(out).toContain('type="search"');
+    expect(out).toContain('name="q"');
+    expect(out).toContain('value="("');
+    expect(out).not.toContain('Canvas Tote');
+    expect(out).not.toContain('Enamel Mug');
   });
 });
