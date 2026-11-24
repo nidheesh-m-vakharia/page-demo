@@ -8,7 +8,9 @@ export default async function HomePage(props: PageProps<'/'>) {
   const query = typeof q === 'string' ? q.trim() : '';
   const { db } = await shop();
   const all = await listProducts(db);
-  const products = query ? all.filter((p) => new RegExp(query, 'i').test(p.name)) : all;
+  const products = query
+    ? all.filter((p) => p.name.toLowerCase().includes(query.toLowerCase()))
+    : all;
 
   return (
     <main>
